@@ -1,0 +1,68 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class String
+{
+private:
+    char *value;
+    int len;
+public:
+    String()
+    {
+        value = new char[1];
+        len = 0;
+        value[0] = '\0';
+    }
+
+    String(string str)
+    {
+        len = str.length();
+        value = new char[len+1];
+        for (int i=0; i<=len; i++) {
+            value[i]=str[i];
+        }
+    }
+
+    String(const String& s)
+    {
+        len=s.len;
+        value = new char[len+1];
+        for (int i=0; i<=len; i++) {
+            value[i]=s.value[i];
+        }
+    }
+
+    friend ostream& operator<<(ostream& outputStream, const String & s);
+    friend istream& operator>>(istream& inputStream, String & s);
+
+    ~String()
+    {
+        delete[] value;
+    }
+
+};
+
+ostream& operator<<(ostream& outputStream, const String & s)
+{
+    return outputStream << s.value;
+}
+
+istream& operator>>(istream& inputStream, String & s)
+{
+    inputStream >> s.value;
+    for (int i=0; s.value[i] != '\0'; i++)
+        s.len+=1;
+    return inputStream;
+}
+
+int main(int argc, char **argv)
+{
+    cout << "Введите строку" << endl;
+    String st;
+    cin >> st;
+    cout << "Введённая строка" << endl;
+    cout << st << endl;
+
+    return 0;
+}
