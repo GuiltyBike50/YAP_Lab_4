@@ -1,0 +1,105 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class String
+{
+private:
+    char *value;
+    int len;
+public:
+    String()
+    {
+        value = new char[1];
+        len = 0;
+        value[0] = '\0';
+    }
+
+    String(string str)
+    {
+        len = str.length();
+        value = new char[len+1];
+        for (int i=0; i<=len; i++) {
+            value[i]=str[i];
+        }
+        cout << len << endl;
+    }
+
+    String(const String& s)
+    {
+        len=s.len;
+        value = new char[len+1];
+        for (int i=0; i<=len; i++) {
+            value[i]=s.value[i];
+        }
+    }
+
+
+    friend ostream& operator<<(ostream& outputStream, const String & s);
+    friend istream& operator>>(istream& inputStream, String & s);
+
+    String& operator=(const String& other)
+    {
+        if (this != &other) {
+            delete[] value;
+            len = other.len;
+            value = new char[len+1];
+            for (int i=0; i<=len; i++) {
+                value[i]=other.value[i];
+            }
+        }
+        return *this;
+    }
+
+    String operator-() const
+    {
+        String ret;
+        ret.len = len;
+        delete[] ret.value;
+        ret.value = new char[len+1];
+        for (int i=0; i<len; i++) {
+            ret.value[i] = value[len-i-1];
+        }
+        ret.value[len] = 0;
+        return ret;
+    }
+
+
+    ~String()
+    {
+        delete[] value;
+    }
+
+};
+
+ostream& operator<<(ostream& outputStream, const String & s)
+{
+    return outputStream << s.value;
+}
+
+istream& operator>>(istream& inputStream, String & s)
+{
+    inputStream >> s.value;
+    for (int i=0; s.value[i] != '\0'; i++)
+        s.len+=1;
+    return inputStream;
+}
+
+int main(int argc, char **argv)
+{
+    cout << "Введите строку 1" << endl;
+    String st1;
+    cin >> st1;
+
+    cout << "Введите строку 2" << endl;
+    String st2;
+    cin >> st2;
+
+    st2 = st1;
+    cout << "Вывод присвоенной строки" << endl;
+    cout << st2 << endl;
+    cout << "Вывод обратной строки" << endl;
+    cout << -st2 << endl;
+
+    return 0;
+}
